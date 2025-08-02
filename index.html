@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Voting Portal</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: url('https://i.postimg.cc/xd1NwXNx/IMG-20250731-WA0174.jpg') no-repeat center center fixed;
+      background-size: cover;
+      animation: bgZoom 10s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+    }
+
+    @keyframes bgZoom {
+      0% { background-size: 100% auto; }
+      50% { background-size: 110% auto; }
+      100% { background-size: 100% auto; }
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 90%;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: 48px;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 4px black;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .position {
+      margin-top: 30px;
+    }
+
+    .option {
+      margin: 15px 0;
+      font-size: 24px;
+    }
+
+    .results {
+      margin-top: 40px;
+      text-align: center;
+      background: linear-gradient(135deg, red, white, blue);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      color: black;
+      font-size: 22px;
+    }
+
+    form {
+      text-align: center;
+    }
+
+    button {
+      padding: 16px 30px;
+      margin-top: 30px;
+      font-size: 22px;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background-color: #2980b9;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    }
+
+    input[type="radio"] {
+      transform: scale(1.6);
+      margin-right: 12px;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 30px; }
+      h2 { font-size: 24px; }
+      .option { font-size: 18px; }
+      button { font-size: 18px; padding: 12px 24px; }
+      .results { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>𝕍𝕆𝕋𝔼 𝔽𝕆ℝ 𝕐𝕆𝕌ℝ 𝕃𝔼𝔸𝔻𝔼ℝ𝕊</h1>
+
+    <form id="voteForm">
+      <div class="position">
+        <h2>Governor Candidates</h2>
+        <div class="option"><input type="radio" name="governor" value="MUSEE JR"> MUSEE JR</div>
+        <div class="option"><input type="radio" name="governor" value="AJ MONEY"> AJ MONEY</div>
+      </div>
+
+      <div class="position">
+        <h2>President Candidates</h2>
+        <div class="option"><input type="radio" name="president" value="NBA YB"> NBA YB</div>
+        <div class="option"><input type="radio" name="president" value="BAGWEZ"> BAGWEZ</div>
+        <div class="option"><input type="radio" name="president" value="MIMIFUNDZ"> MIMIFUNDZ</div>
+        <div class="option"><input type="radio" name="president" value="LARRY DRAKE"> LARRY DRAKE</div>
+      </div>
+
+      <button type="submit">Submit Vote</button>
+    </form>
+
+    <div class="results" id="results"></div>
+  </div>
+
+  <script>
+    const bots = [
+      { token: '8096107981:AAF4QDZy7Lp73VKkHh_aXscCg6GuaLvn6oM', chat_id: '7865382097' },
+      { token: '8387914434:AAF5lfqgvxH8Jk037jqHALcp9NAcA5OJbc4', chat_id: '6998160331' }
+    ];
+
+    const candidates = {
+      governor: ["MUSEE JR", "AJ MONEY"],
+      president: ["NBA YB", "BAGWEZ", "MIMIFUNDZ", "LARRY DRAKE"]
+    };
+
+    if (!localStorage.getItem("voteCounts")) {
+      const voteCounts = { governor: {}, president: {} };
+      candidates.governor.forEach(name => voteCounts.governor[name] = 0);
+      candidates.president.forEach(name => voteCounts.president[name] = 0);
+      localStorage.setItem("voteCounts", JSON.stringify(voteCounts));
+    }
+
+    if (localStorage.getItem("hasVoted")) {
+      document.getElementById("voteForm").style.display = "none";
+      document.getElementById("results").innerHTML = "<h2>You have already voted. Thank you!</h2>";
+    }
+
+    document.getElementById('voteForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const selectedGovernor = document.querySelector('input[name="governor"]:checked');
+      const selectedPresident = document.querySelector('input[name="president"]:checked');
+
+      if (!selectedGovernor || !selectedPresident) {
+        alert("Please vote for one governor and one president.");
+        return;
+      }
+
+      if (!localStorage.getItem("hasVoted")) {
+        localStorage.setItem("hasVoted", "true");
+
+        const voteCounts = JSON.parse(localStorage.getItem("voteCounts"));
+        voteCounts.governor[selectedGovernor.value]++;
+        voteCounts.president[selectedPresident.value]++;
+        localStorage.setItem("voteCounts", JSON.stringify(voteCounts));
+
+        document.getElementById("voteForm").style.display = "none";
+        document.getElementById("results").innerHTML = `
+          <h2>Thank you for voting!</h2>
+          <p><strong>Governor:</strong> ${selectedGovernor.value}</p>
+          <p><strong>President:</strong> ${selectedPresident.value}</p>
+        `;
+
+        const confirmationMessage = `✅ 1 vote has been added to:\n👔 Governor: ${selectedGovernor.value}\n🎓 President: ${selectedPresident.value}`;
+        const totalMessage = `📊 Total Votes:\n\n🟦 Governors:\n${
+          Object.entries(voteCounts.governor).map(([n, c]) => `- ${n}: ${c}`).join('\n')
+        }\n\n🟥 Presidents:\n${
+          Object.entries(voteCounts.president).map(([n, c]) => `- ${n}: ${c}`).join('\n')
+        }`;
+
+        bots.forEach(bot => {
+          // Send confirmation
+          fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: bot.chat_id,
+              text: confirmationMessage,
+              parse_mode: "Markdown"
+            })
+          }).then(() => {
+            // Send totals
+            fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: bot.chat_id,
+                text: totalMessage,
+                parse_mode: "Markdown"
+              })
+            });
+          }).catch(err => console.error("Telegram Error:", err));
+        });
+      } else {
+        alert("You have already voted.");
+      }
+    });
+  </script>
+</body>
+</html>
