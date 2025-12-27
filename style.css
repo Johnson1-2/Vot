@@ -23,76 +23,78 @@
   --unread-bg: #ef4444;
 }
 
-/* 1. MOVING BACKGROUND */
+/* 1. BACKGROUND */
 body { 
   margin: 0; 
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
               url('https://files.catbox.moe/v2w24h.jpg');
   background-size: cover;
-  background-attachment: fixed; /* Keeps background still while you scroll */
+  background-position: center;
+  overflow: hidden; /* Prevents the whole page from wobbling */
 }
 
-/* 2. MAIN CONTAINER (The "Glass" Box) */
+/* 2. THE MAIN DASHBOARD */
 .main-container {
   display: flex;
   width: 95%;
   max-width: 1200px;
-  height: 90vh; /* Takes most of the screen */
+  height: 90vh;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-  overflow: hidden; /* Keeps the chat and sidebar contained */
+  overflow-x: auto; /* THIS MAKES IT MOVABLE LEFT/RIGHT */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* Smooth swiping on iPhone/Android */
 }
 
-/* 3. SIDEBAR (Width fixed to show names) */
+/* 3. SIDEBAR (Protected Width) */
 .users { 
   width: 280px; 
+  min-width: 280px; /* Won't get squashed */
   background: rgba(30, 41, 59, 0.95) !important; 
   border-right: 1px solid rgba(255,255,255,0.1); 
   display: flex; 
   flex-direction: column; 
   color: var(--sidebar-text);
-  overflow-y: auto; /* Allows scrolling down if you have many users */
+  overflow-y: auto;
 }
 
 .users-header { 
     padding: 20px; 
     background: var(--sidebar-header); 
     position: sticky; top: 0; z-index: 5;
-    border-bottom: 1px solid rgba(255,255,255,0.1); 
 }
 
 .user-list-item { 
     padding: 15px 20px; 
     border-bottom: 1px solid rgba(255,255,255,0.05); 
-    cursor: pointer; 
     display: flex; 
     align-items: center;
-    justify-content: space-between; /* Pushes unread badge to the right */
+    justify-content: space-between;
 }
 
-.user-list-item:hover { background: var(--sidebar-hover); }
 .user-list-item.active { background: var(--primary); color: white; }
 
 /* 4. CHAT AREA */
 .chat { 
+  min-width: 320px; /* Ensures chat stays wide enough to read */
   flex: 1; 
   display: flex; 
   flex-direction: column; 
   background: rgba(255, 255, 255, 0.9) !important; 
 }
 
-/* 5. ELEMENTS */
+/* 5. UI COMPONENTS */
 .unread-badge { 
     background: var(--unread-bg); 
     color: white; font-size: 12px; padding: 3px 8px; 
-    border-radius: 12px; min-width: 20px; text-align: center;
+    border-radius: 12px; margin-left: 10px;
 }
 
 .admin-user-icon { 
@@ -101,44 +103,34 @@ body {
     align-items: center; justify-content: center; margin-right: 12px; 
 }
 
-/* 6. MOBILE FIX: SCROLLABLE SIDEBAR */
+/* 6. MOBILE SPECIFIC TWEAKS */
 @media(max-width: 700px) {
-  /* Make the box full screen so you have room to touch and move */
-  .main-container { 
-    width: 100%; 
-    height: 100vh; 
-    border-radius: 0; 
+  .main-container {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
   }
-
-  /* SIDEBAR: Wider so names don't hide */
-  .users { 
-    width: 180px; 
-    flex-shrink: 0; /* Prevents the sidebar from getting squashed */
-    overflow-x: auto; /* Allows horizontal movement if text is huge */
-  }
-
-  /* USER NAMES: Visible and bold */
-  .users span { 
-    display: block !important; 
-    font-size: 13px;
-    max-width: 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  /* Ensure the chat area doesn't disappear */
-  .chat {
-    min-width: 200px;
+  
+  /* This hint helps the user know they can slide */
+  .main-container::after {
+    content: "← Slide for Chat →";
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    pointer-events: none;
+    opacity: 0.7;
   }
 }
 
-/* Reusable Hidden Class */
 .hidden { display: none !important; }
-
-/* Login styles remain same but centered */
-.login-card { background: #fff; padding: 2rem; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.login-card { background: #fff; padding: 2rem; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; }
 .chat-header { padding: 10px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; background: #fff; }
 .messages { flex: 1; padding: 15px; overflow-y: auto; background: var(--chat-bg); }
 .input-area { padding: 10px; display: flex; gap: 5px; background: #eee; }
 .input-area input { flex: 1; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
-
