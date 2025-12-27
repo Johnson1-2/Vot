@@ -46,10 +46,14 @@
 </div>
 
 <div class="container hidden" id="adminPanel">
-  <div class="users">
+  <div class="users" id="sidebar">
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
     <div class="users-header">Active Customers</div>
     <div id="userList"></div>
   </div>
+
   <div class="chat">
     <div class="chat-header">
       <span id="chatHeader">Select a customer</span>
@@ -57,7 +61,10 @@
     </div>
     <div class="messages" id="messages"></div>
     <div class="input-area">
-      <label class="camera-label"><i class="fa-solid fa-camera"></i><input type="file" id="adminFile" class="hidden" accept="image/*" onchange="previewAdminImage(this)"></label>
+      <label class="camera-label">
+          <i class="fa-solid fa-camera"></i>
+          <input type="file" id="adminFile" class="hidden" accept="image/*" onchange="previewAdminImage(this)">
+      </label>
       <input type="text" id="messageInput" placeholder="Reply...">
       <button onclick="sendAdminMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
@@ -83,12 +90,22 @@
     </div>
     <div class="messages" id="customerMessages"></div>
     <div class="input-area">
-      <label class="camera-label"><i class="fa-solid fa-camera"></i><input type="file" id="customerFile" class="hidden" accept="image/*" onchange="sendCustomerImage(this)"></label>
+      <label class="camera-label">
+          <i class="fa-solid fa-camera"></i>
+          <input type="file" id="customerFile" class="hidden" accept="image/*" onchange="sendCustomerImage(this)">
+      </label>
       <input type="text" id="customerInput" placeholder="Type a message">
       <button onclick="sendCustomerMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
   </div>
 </div>
+
+<script>
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('expanded');
+}
+</script>
 
 <script src="script.js"></script>
 </body>
