@@ -2,69 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="siteTitle">Support Chat | Admin Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Support Chat | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="previewModal">
-    <div class="preview-content">
-        <h3 style="margin-top:0; color: #333;">Confirm Send Image</h3>
-        <img id="imgPreviewTarget" src="" alt="Preview">
-        <div class="preview-btns">
-            <button class="btn-send" onclick="confirmSendImage()"><i class="fa-solid fa-paper-plane"></i> Send Now</button>
-            <button class="btn-cancel" onclick="closePreview()">Cancel</button>
+<div id="previewModal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; display:flex; align-items:center; justify-content:center;">
+    <div style="background:white; padding:20px; border-radius:10px; text-align:center;">
+        <img id="imgPreviewTarget" src="" style="max-width:300px; border-radius:5px;">
+        <div style="margin-top:15px;">
+            <button onclick="confirmSendImage()" style="background:#22c55e; color:white; padding:10px 20px; border:none; border-radius:5px;">Send</button>
+            <button onclick="closePreview()" style="background:#ef4444; color:white; padding:10px 20px; border:none; border-radius:5px;">Cancel</button>
         </div>
     </div>
 </div>
 
-<div id="forgotPassAd">
-    <i class="fa-brands fa-whatsapp" style="color: #25d366; margin-right: 8px;"></i>
-    Please contact <b>+278782628-747</b> on WhatsApp to get your details or password.
-</div>
-
-<div class="login" id="login">
-  <div class="login-card">
-      <h2 style="color: #2563eb;">Support Chat</h2>
-      <p style="color: #333; font-size: 14px; margin-bottom: 20px;">Identity verification required</p>
-      <input type="text" id="nameInput" placeholder="Your Name">
-      
+<div class="login" id="login" style="height:100vh; display:flex; align-items:center; justify-content:center; background:url('https://files.catbox.moe/v2w24h.jpg') center/cover;">
+  <div style="background:rgba(255,255,255,0.9); padding:40px; border-radius:15px; width:350px; text-align:center;">
+      <h2 style="color:var(--primary)">Support Chat</h2>
+      <input type="text" id="nameInput" placeholder="Your Name" style="width:100%; padding:10px; margin-bottom:10px;">
       <div id="pwdContainer" class="hidden">
-        <div class="password-wrapper">
-          <input type="password" id="passwordInput" placeholder="Password">
-          <i class="fa-solid fa-eye-slash" id="togglePassword"></i>
-        </div>
+          <input type="password" id="passwordInput" placeholder="Password" style="width:100%; padding:10px; margin-bottom:10px;">
       </div>
-
-      <button id="loginBtn" onclick="login()">Continue</button>
-      <a class="forgot-link" onclick="showForgotAd()">Forgot Password?</a>
-      <p id="loginMsg" class="error-msg"></p>
+      <button onclick="login()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px;">Continue</button>
+      <p id="loginMsg" style="font-size:12px; margin-top:10px;"></p>
   </div>
 </div>
 
 <div class="container hidden" id="adminPanel">
   <div class="users" id="sidebar">
-    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar">
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
         <i class="fa-solid fa-chevron-right"></i>
     </button>
     <div class="users-header">Active Customers</div>
     <div id="userList"></div>
   </div>
-
   <div class="chat">
     <div class="chat-header">
       <span id="chatHeader">Select a customer</span>
-      <button class="back-btn" onclick="logout()">Logout</button>
+      <button onclick="logout()" style="background:none; border:1px solid #ddd; padding:5px 10px; border-radius:5px;">Logout</button>
     </div>
     <div class="messages" id="messages"></div>
     <div class="input-area">
-      <label class="camera-label">
-          <i class="fa-solid fa-camera"></i>
-          <input type="file" id="adminFile" class="hidden" accept="image/*" onchange="previewAdminImage(this)">
-      </label>
       <input type="text" id="messageInput" placeholder="Reply...">
       <button onclick="sendAdminMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
@@ -74,38 +56,20 @@
 <div class="container hidden" id="customerPanel">
   <div class="chat">
     <div class="chat-header">
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <div class="profile-icon">
-                <img src="https://ui-avatars.com/api/?name=Support&background=2563eb&color=fff" alt="Support">
-            </div>
-            <div style="display: flex; flex-direction: column;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <div style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%;"></div>
-                    <h4 style="margin:0">Live Support</h4>
-                </div>
-                <span style="font-size: 10px; color: var(--text-muted); font-weight: normal !important;">Online</span>
-            </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:35px; height:35px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center;">S</div>
+            <div><strong>Live Support</strong><br><small style="color:green">Online</small></div>
         </div>
-        <button class="back-btn" onclick="logout()">Logout</button>
+        <button onclick="logout()" style="background:none; border:1px solid #ddd; padding:5px 10px; border-radius:5px;">Logout</button>
     </div>
     <div class="messages" id="customerMessages"></div>
     <div class="input-area">
-      <label class="camera-label">
-          <i class="fa-solid fa-camera"></i>
-          <input type="file" id="customerFile" class="hidden" accept="image/*" onchange="sendCustomerImage(this)">
-      </label>
+      <label style="cursor:pointer;"><i class="fa-solid fa-camera"></i><input type="file" class="hidden" onchange="sendCustomerImage(this)"></label>
       <input type="text" id="customerInput" placeholder="Type a message">
       <button onclick="sendCustomerMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
   </div>
 </div>
-
-<script>
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('expanded');
-}
-</script>
 
 <script src="script.js"></script>
 </body>
