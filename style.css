@@ -1,4 +1,4 @@
-/* Global Bold Setting */
+/* Global Reset */
 * { font-weight: bold !important; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
 :root {
@@ -19,7 +19,7 @@
   --unread-bg: #ef4444;
 }
 
-/* 1. MOVABLE BACKGROUND (Applies to Admin Page) */
+/* 1. BACKGROUND (Animated only for Admin/Login) */
 body { 
   margin: 0; 
   height: 100vh; 
@@ -27,7 +27,7 @@ body {
               url('https://files.catbox.moe/v2w24h.jpg');
   background-size: 150% 150%;
   animation: backgroundMove 20s ease-in-out infinite alternate;
-  overflow: hidden; /* Keeps the background from scrolling */
+  overflow: hidden; 
 }
 
 @keyframes backgroundMove {
@@ -35,83 +35,66 @@ body {
   100% { background-position: 100% 50%; }
 }
 
-/* 2. ADMIN CONTAINER - THIS IS THE MOVABLE PART */
-.container { 
+/* 2. LOGIN SCREEN (Fixed - Not Movable) */
+.login-wrapper {
+  height: 100vh; display: flex; justify-content: center; align-items: center;
+}
+.login-card {
+  background: rgba(255, 255, 255, 0.95); padding: 2.5rem; border-radius: 12px;
+  width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* 3. CUSTOMER PANEL (Fixed - Not Movable) */
+#customerPanel {
+  display: flex; height: 100vh; width: 100vw;
+}
+
+/* 4. ADMIN PANEL (THE ONLY MOVABLE PART) */
+#adminPanel { 
   display: flex; 
   height: 100vh; 
   width: 100vw;
-  overflow-x: auto; /* Enable horizontal swiping */
+  overflow-x: auto; /* Horizontal movement enabled ONLY here */
   overflow-y: hidden;
-  scroll-snap-type: x mandatory; /* Makes swiping feel "snappy" */
+  scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch; 
 }
 
-/* 3. SIDEBAR (Fixed Width for visibility) */
-.users { 
+#adminPanel .users { 
   width: 280px; 
-  min-width: 280px; /* Prevents squashing so you can see names */
+  min-width: 280px; /* Locked width to force the scroll */
   background: rgba(30, 41, 59, 0.95); 
   backdrop-filter: blur(10px);
-  border-right: 1px solid var(--sidebar-header); 
-  display: flex; flex-direction: column; color: var(--sidebar-text);
-  overflow-y: auto;
+  color: var(--sidebar-text);
+  display: flex; flex-direction: column;
   scroll-snap-align: start;
 }
 
-/* 4. CHAT AREA (Wide enough to force scrolling) */
-.chat { 
+#adminPanel .chat { 
   flex: 1; 
-  min-width: 100vw; /* Forces the chat to take a full screen width */
-  display: flex; 
-  flex-direction: column; 
-  background: rgba(255, 255, 255, 0.8); 
-  backdrop-filter: blur(5px);
+  min-width: 100vw; /* Forces the chat to be a full screen away */
+  display: flex; flex-direction: column;
+  background: rgba(255, 255, 255, 0.8);
   scroll-snap-align: start;
 }
 
-/* 5. UI ELEMENTS FIXES */
-.user-list-item {
-  padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); 
-  cursor: pointer; display: flex; align-items: center;
-}
+/* 5. UI ELEMENTS */
+.user-list-item { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; }
+.user-list-item span { display: block !important; white-space: nowrap; margin-left: 10px; }
+.unread-badge { background: var(--unread-bg); color: white; padding: 2px 7px; border-radius: 10px; margin-left: auto; }
+.admin-user-icon { width: 32px; height: 32px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-.user-list-item span {
-  display: block !important; /* Ensures name is never hidden */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-left: 10px;
-}
-
-.unread-badge {
-  background: var(--unread-bg);
-  color: white; font-size: 11px; padding: 2px 7px;
-  border-radius: 10px; margin-left: auto; display: inline-block;
-  min-width: 18px; text-align: center;
-}
-
-/* Login remains centered and non-scrolling */
-.login {
-  height: 100vh; display: flex; justify-content: center; align-items: center;
-  position: absolute; width: 100%; z-index: 100;
-}
-
-.login-card {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 2.5rem; border-radius: 12px;
-  width: 90%; max-width: 400px; text-align: center;
-}
-
-/* Standard Chat Styles */
+/* 6. GENERAL CHAT STYLES */
 .chat-header { padding: 12px 24px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
 .messages { flex: 1; padding: 24px; overflow-y: auto; background-color: var(--chat-bg); }
-.input-area { padding: 12px 20px; background: #f0f2f5; display: flex; gap: 12px; align-items: center; }
-.input-area input[type="text"] { flex: 1; padding: 10px 18px; border-radius: 20px; border:none; outline: none; }
-.input-area button { background: var(--primary); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+.input-area { padding: 12px 20px; background: #f0f2f5; display: flex; gap: 12px; }
+.input-area input { flex: 1; padding: 10px; border-radius: 20px; border: none; }
+.input-area button { background: var(--primary); color: white; border-radius: 50%; width: 40px; height: 40px; border: none; cursor: pointer; }
 
-/* REPLACING YOUR OLD MEDIA QUERY COMPLETELY */
+.hidden { display: none !important; }
+
+/* Mobile logic specifically for the Admin sidebar */
 @media(max-width: 700px) {
-  .users { width: 280px; min-width: 280px; }
-  .users span { display: block !important; }
-  .admin-user-icon { margin-right: 10px; }
+  #adminPanel .users { width: 280px; min-width: 280px; }
+  #customerPanel .users { width: 0; display: none; } /* Hide sidebar on customer view */
 }
