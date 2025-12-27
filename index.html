@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Support Chat | Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="siteTitle">Support Chat | Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,42 +11,52 @@
 
 <div id="previewModal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; display:flex; align-items:center; justify-content:center;">
     <div style="background:white; padding:20px; border-radius:10px; text-align:center;">
-        <img id="imgPreviewTarget" src="" style="max-width:300px; border-radius:5px;">
-        <div style="margin-top:15px;">
-            <button onclick="confirmSendImage()" style="background:#22c55e; color:white; padding:10px 20px; border:none; border-radius:5px;">Send</button>
-            <button onclick="closePreview()" style="background:#ef4444; color:white; padding:10px 20px; border:none; border-radius:5px;">Cancel</button>
+        <h3 style="margin-top:0;">Confirm Send Image</h3>
+        <img id="imgPreviewTarget" src="" style="max-width:100%; max-height:300px;">
+        <div style="margin-top:10px;">
+            <button onclick="confirmSendImage()" style="background:#2563eb; color:white; padding:8px 15px; border:none; border-radius:5px;">Send Now</button>
+            <button onclick="closePreview()" style="background:#ccc; padding:8px 15px; border:none; border-radius:5px;">Cancel</button>
         </div>
     </div>
 </div>
 
-<div class="login" id="login" style="height:100vh; display:flex; align-items:center; justify-content:center; background:url('https://files.catbox.moe/v2w24h.jpg') center/cover;">
-  <div style="background:rgba(255,255,255,0.9); padding:40px; border-radius:15px; width:350px; text-align:center;">
-      <h2 style="color:var(--primary)">Support Chat</h2>
+<div id="forgotPassAd">
+    <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>
+    Please contact <b>+278782628-747</b> on WhatsApp for password.
+</div>
+
+<div class="login" id="login">
+  <div class="login-card">
+      <h2 style="color: #2563eb;">Support Chat</h2>
       <input type="text" id="nameInput" placeholder="Your Name" style="width:100%; padding:10px; margin-bottom:10px;">
       <div id="pwdContainer" class="hidden">
+        <div class="password-wrapper">
           <input type="password" id="passwordInput" placeholder="Password" style="width:100%; padding:10px; margin-bottom:10px;">
+          <i class="fa-solid fa-eye-slash" id="togglePassword"></i>
+        </div>
       </div>
-      <button onclick="login()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px;">Continue</button>
-      <p id="loginMsg" style="font-size:12px; margin-top:10px;"></p>
+      <button onclick="login()" style="width:100%; padding:10px; background:#2563eb; color:white; border:none; border-radius:5px;">Continue</button>
+      <a onclick="showForgotAd()" style="display:block; margin-top:10px; cursor:pointer; font-size:12px;">Forgot Password?</a>
+      <p id="loginMsg" style="font-size:12px; margin-top:5px;"></p>
   </div>
 </div>
 
 <div class="container hidden" id="adminPanel">
   <div class="users" id="sidebar">
-    <button class="sidebar-toggle" onclick="toggleSidebar()">
-        <i class="fa-solid fa-chevron-right"></i>
-    </button>
-    <div class="users-header">Active Customers</div>
+    <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="users-header" style="padding:20px; background:#0f172a;">Active Customers</div>
     <div id="userList"></div>
   </div>
   <div class="chat">
-    <div class="chat-header">
+    <div class="chat-header" style="padding:15px; border-bottom:1px solid #ddd; display:flex; justify-content:space-between;">
       <span id="chatHeader">Select a customer</span>
-      <button onclick="logout()" style="background:none; border:1px solid #ddd; padding:5px 10px; border-radius:5px;">Logout</button>
+      <button onclick="logout()">Logout</button>
     </div>
     <div class="messages" id="messages"></div>
-    <div class="input-area">
-      <input type="text" id="messageInput" placeholder="Reply...">
+    <div class="input-area" style="padding:10px; background:#eee; display:flex;">
+      <input type="file" id="adminFile" class="hidden" accept="image/*" onchange="previewAdminImage(this)">
+      <button onclick="document.getElementById('adminFile').click()"><i class="fa-solid fa-camera"></i></button>
+      <input type="text" id="messageInput" placeholder="Reply..." style="flex:1; margin:0 10px; padding:8px; border-radius:20px; border:none;">
       <button onclick="sendAdminMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
   </div>
@@ -55,17 +64,18 @@
 
 <div class="container hidden" id="customerPanel">
   <div class="chat">
-    <div class="chat-header">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div style="width:35px; height:35px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center;">S</div>
-            <div><strong>Live Support</strong><br><small style="color:green">Online</small></div>
-        </div>
-        <button onclick="logout()" style="background:none; border:1px solid #ddd; padding:5px 10px; border-radius:5px;">Logout</button>
+    <div class="chat-header" style="padding:15px; border-bottom:1px solid #ddd; display:flex; justify-content:space-between;">
+      <div style="display:flex; align-items:center;">
+          <div style="width:10px; height:10px; background:#22c55e; border-radius:50%; margin-right:5px;"></div>
+          <h4>Live Support</h4>
+      </div>
+      <button onclick="logout()">Logout</button>
     </div>
     <div class="messages" id="customerMessages"></div>
-    <div class="input-area">
-      <label style="cursor:pointer;"><i class="fa-solid fa-camera"></i><input type="file" class="hidden" onchange="sendCustomerImage(this)"></label>
-      <input type="text" id="customerInput" placeholder="Type a message">
+    <div class="input-area" style="padding:10px; background:#eee; display:flex;">
+      <input type="file" id="customerFile" class="hidden" accept="image/*" onchange="sendCustomerImage(this)">
+      <button onclick="document.getElementById('customerFile').click()"><i class="fa-solid fa-camera"></i></button>
+      <input type="text" id="customerInput" placeholder="Type a message..." style="flex:1; margin:0 10px; padding:8px; border-radius:20px; border:none;">
       <button onclick="sendCustomerMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
   </div>
