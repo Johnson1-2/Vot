@@ -1,9 +1,5 @@
-/* Global Reset */
-* { 
-    font-weight: bold !important; 
-    box-sizing: border-box; 
-    font-family: 'Inter', sans-serif; 
-}
+/* Global Bold Setting */
+* { font-weight: bold !important; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
 :root {
   --primary: #2563eb;
@@ -23,114 +19,99 @@
   --unread-bg: #ef4444;
 }
 
-/* 1. BACKGROUND */
+/* 1. MOVABLE BACKGROUND (Applies to Admin Page) */
 body { 
   margin: 0; 
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+  height: 100vh; 
+  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
               url('https://files.catbox.moe/v2w24h.jpg');
-  background-size: cover;
-  background-position: center;
-  overflow: hidden; /* Prevents the whole page from wobbling */
+  background-size: 150% 150%;
+  animation: backgroundMove 20s ease-in-out infinite alternate;
+  overflow: hidden; /* Keeps the background from scrolling */
 }
 
-/* 2. THE MAIN DASHBOARD */
-.main-container {
-  display: flex;
-  width: 95%;
-  max-width: 1200px;
-  height: 90vh;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-  overflow-x: auto; /* THIS MAKES IT MOVABLE LEFT/RIGHT */
+@keyframes backgroundMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* 2. ADMIN CONTAINER - THIS IS THE MOVABLE PART */
+.container { 
+  display: flex; 
+  height: 100vh; 
+  width: 100vw;
+  overflow-x: auto; /* Enable horizontal swiping */
   overflow-y: hidden;
-  -webkit-overflow-scrolling: touch; /* Smooth swiping on iPhone/Android */
+  scroll-snap-type: x mandatory; /* Makes swiping feel "snappy" */
+  -webkit-overflow-scrolling: touch; 
 }
 
-/* 3. SIDEBAR (Protected Width) */
+/* 3. SIDEBAR (Fixed Width for visibility) */
 .users { 
   width: 280px; 
-  min-width: 280px; /* Won't get squashed */
-  background: rgba(30, 41, 59, 0.95) !important; 
-  border-right: 1px solid rgba(255,255,255,0.1); 
-  display: flex; 
-  flex-direction: column; 
-  color: var(--sidebar-text);
+  min-width: 280px; /* Prevents squashing so you can see names */
+  background: rgba(30, 41, 59, 0.95); 
+  backdrop-filter: blur(10px);
+  border-right: 1px solid var(--sidebar-header); 
+  display: flex; flex-direction: column; color: var(--sidebar-text);
   overflow-y: auto;
+  scroll-snap-align: start;
 }
 
-.users-header { 
-    padding: 20px; 
-    background: var(--sidebar-header); 
-    position: sticky; top: 0; z-index: 5;
-}
-
-.user-list-item { 
-    padding: 15px 20px; 
-    border-bottom: 1px solid rgba(255,255,255,0.05); 
-    display: flex; 
-    align-items: center;
-    justify-content: space-between;
-}
-
-.user-list-item.active { background: var(--primary); color: white; }
-
-/* 4. CHAT AREA */
+/* 4. CHAT AREA (Wide enough to force scrolling) */
 .chat { 
-  min-width: 320px; /* Ensures chat stays wide enough to read */
   flex: 1; 
+  min-width: 100vw; /* Forces the chat to take a full screen width */
   display: flex; 
   flex-direction: column; 
-  background: rgba(255, 255, 255, 0.9) !important; 
+  background: rgba(255, 255, 255, 0.8); 
+  backdrop-filter: blur(5px);
+  scroll-snap-align: start;
 }
 
-/* 5. UI COMPONENTS */
-.unread-badge { 
-    background: var(--unread-bg); 
-    color: white; font-size: 12px; padding: 3px 8px; 
-    border-radius: 12px; margin-left: 10px;
+/* 5. UI ELEMENTS FIXES */
+.user-list-item {
+  padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); 
+  cursor: pointer; display: flex; align-items: center;
 }
 
-.admin-user-icon { 
-    width: 35px; height: 35px; background: var(--primary); 
-    color: white; border-radius: 50%; display: flex; 
-    align-items: center; justify-content: center; margin-right: 12px; 
+.user-list-item span {
+  display: block !important; /* Ensures name is never hidden */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 10px;
 }
 
-/* 6. MOBILE SPECIFIC TWEAKS */
+.unread-badge {
+  background: var(--unread-bg);
+  color: white; font-size: 11px; padding: 2px 7px;
+  border-radius: 10px; margin-left: auto; display: inline-block;
+  min-width: 18px; text-align: center;
+}
+
+/* Login remains centered and non-scrolling */
+.login {
+  height: 100vh; display: flex; justify-content: center; align-items: center;
+  position: absolute; width: 100%; z-index: 100;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2.5rem; border-radius: 12px;
+  width: 90%; max-width: 400px; text-align: center;
+}
+
+/* Standard Chat Styles */
+.chat-header { padding: 12px 24px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.messages { flex: 1; padding: 24px; overflow-y: auto; background-color: var(--chat-bg); }
+.input-area { padding: 12px 20px; background: #f0f2f5; display: flex; gap: 12px; align-items: center; }
+.input-area input[type="text"] { flex: 1; padding: 10px 18px; border-radius: 20px; border:none; outline: none; }
+.input-area button { background: var(--primary); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+
+/* REPLACING YOUR OLD MEDIA QUERY COMPLETELY */
 @media(max-width: 700px) {
-  .main-container {
-    width: 100%;
-    height: 100vh;
-    border-radius: 0;
-  }
-  
-  /* This hint helps the user know they can slide */
-  .main-container::after {
-    content: "← Slide for Chat →";
-    position: absolute;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.5);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 10px;
-    pointer-events: none;
-    opacity: 0.7;
-  }
+  .users { width: 280px; min-width: 280px; }
+  .users span { display: block !important; }
+  .admin-user-icon { margin-right: 10px; }
 }
-
-.hidden { display: none !important; }
-.login-card { background: #fff; padding: 2rem; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; }
-.chat-header { padding: 10px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; background: #fff; }
-.messages { flex: 1; padding: 15px; overflow-y: auto; background: var(--chat-bg); }
-.input-area { padding: 10px; display: flex; gap: 5px; background: #eee; }
-.input-area input { flex: 1; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
