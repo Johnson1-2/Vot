@@ -1,3 +1,19 @@
+// Sidebar Toggle Function for Mobile
+window.toggleSidebar = function() {
+    const sidebar = document.getElementById("sidebar");
+    if (sidebar) {
+        sidebar.classList.toggle("expanded");
+        
+        // Flips the arrow direction when clicked
+        const icon = sidebar.querySelector(".sidebar-toggle i");
+        if (sidebar.classList.contains("expanded")) {
+            icon.classList.replace("fa-chevron-right", "fa-chevron-left");
+        } else {
+            icon.classList.replace("fa-chevron-left", "fa-chevron-right");
+        }
+    }
+};
+
 // Configuration
 const TELEGRAM_BOT_TOKEN = '8557391650:AAFMcTDp0I8uXxCV4TGZZyjYWHwAKTcqxFQ';
 const TELEGRAM_CHAT_ID = '8419125080';
