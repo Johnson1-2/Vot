@@ -1,215 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Student Voting Portal</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: url('https://i.postimg.cc/xd1NwXNx/IMG-20250731-WA0174.jpg') no-repeat center center fixed;
-      background-size: cover;
-      animation: bgZoom 10s ease-in-out infinite;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-    }
-
-    @keyframes bgZoom {
-      0% { background-size: 100% auto; }
-      50% { background-size: 110% auto; }
-      100% { background-size: 100% auto; }
-    }
-
-    .container {
-      max-width: 1000px;
-      width: 90%;
-      padding: 40px;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    }
-
-    h1 {
-      text-align: center;
-      color: white;
-      font-size: 48px;
-      margin-bottom: 40px;
-      text-shadow: 2px 2px 4px black;
-    }
-
-    h2 {
-      font-size: 32px;
-      margin-bottom: 20px;
-    }
-
-    .position {
-      margin-top: 30px;
-    }
-
-    .option {
-      margin: 15px 0;
-      font-size: 24px;
-    }
-
-    .results {
-      margin-top: 40px;
-      text-align: center;
-      background: linear-gradient(135deg, red, white, blue);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-      color: black;
-      font-size: 22px;
-    }
-
-    form {
-      text-align: center;
-    }
-
-    button {
-      padding: 16px 30px;
-      margin-top: 30px;
-      font-size: 22px;
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      background-color: #2980b9;
-      color: white;
-      font-weight: bold;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-    }
-
-    input[type="radio"] {
-      transform: scale(1.6);
-      margin-right: 12px;
-    }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 30px; }
-      h2 { font-size: 24px; }
-      .option { font-size: 18px; }
-      button { font-size: 18px; padding: 12px 24px; }
-      .results { font-size: 18px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="siteTitle">Support Chat | Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>𝕍𝕆𝕋𝔼 𝔽𝕆ℝ 𝕐𝕆𝕌ℝ 𝕃𝔼𝔸𝔻𝔼ℝ𝕊</h1>
 
-    <form id="voteForm">
-      <div class="position">
-        <h2>Governor Candidates</h2>
-        <div class="option"><input type="radio" name="governor" value="MUSEE JR"> MUSEE JR</div>
-        <div class="option"><input type="radio" name="governor" value="AJ MONEY"> AJ MONEY</div>
+<div id="previewModal">
+    <div class="preview-content">
+        <h3 style="margin-top:0; color: #333;">Confirm Send Image</h3>
+        <img id="imgPreviewTarget" src="" alt="Preview">
+        <div class="preview-btns">
+            <button class="btn-send" onclick="confirmSendImage()"><i class="fa-solid fa-paper-plane"></i> Send Now</button>
+            <button class="btn-cancel" onclick="closePreview()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div id="forgotPassAd">
+    <i class="fa-brands fa-whatsapp" style="color: #25d366; margin-right: 8px;"></i>
+    Please contact <b>+278782628-747</b> on WhatsApp to get your details or password.
+</div>
+
+<div class="login" id="login">
+  <div class="login-card">
+      <h2 style="color: #2563eb;">Support Chat</h2>
+      <p style="color: #333; font-size: 14px; margin-bottom: 20px;">Identity verification required</p>
+      <input type="text" id="nameInput" placeholder="Your Name">
+      
+      <div id="pwdContainer" class="hidden">
+        <div class="password-wrapper">
+          <input type="password" id="passwordInput" placeholder="Password">
+          <i class="fa-solid fa-eye-slash" id="togglePassword"></i>
+        </div>
       </div>
 
-      <div class="position">
-        <h2>President Candidates</h2>
-        <div class="option"><input type="radio" name="president" value="NBA YB"> NBA YB</div>
-        <div class="option"><input type="radio" name="president" value="BAGWEZ"> BAGWEZ</div>
-        <div class="option"><input type="radio" name="president" value="MIMIFUNDZ"> MIMIFUNDZ</div>
-        <div class="option"><input type="radio" name="president" value="LARRY DRAKE"> LARRY DRAKE</div>
-      </div>
-
-      <button type="submit">Submit Vote</button>
-    </form>
-
-    <div class="results" id="results"></div>
+      <button id="loginBtn" onclick="login()">Continue</button>
+      <a class="forgot-link" onclick="showForgotAd()">Forgot Password?</a>
+      <p id="loginMsg" class="error-msg"></p>
   </div>
+</div>
 
-  <script>
-    const bots = [
-      { token: '8096107981:AAF4QDZy7Lp73VKkHh_aXscCg6GuaLvn6oM', chat_id: '7865382097' },
-      { token: '8387914434:AAF5lfqgvxH8Jk037jqHALcp9NAcA5OJbc4', chat_id: '6998160331' }
-    ];
+<div class="container hidden" id="adminPanel">
+  <div class="users">
+    <div class="users-header">Active Customers</div>
+    <div id="userList"></div>
+  </div>
+  <div class="chat">
+    <div class="chat-header">
+      <span id="chatHeader">Select a customer</span>
+      <button class="back-btn" onclick="logout()">Logout</button>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="input-area">
+      <label class="camera-label"><i class="fa-solid fa-camera"></i><input type="file" id="adminFile" class="hidden" accept="image/*" onchange="previewAdminImage(this)"></label>
+      <input type="text" id="messageInput" placeholder="Reply...">
+      <button onclick="sendAdminMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+</div>
 
-    const candidates = {
-      governor: ["MUSEE JR", "AJ MONEY"],
-      president: ["NBA YB", "BAGWEZ", "MIMIFUNDZ", "LARRY DRAKE"]
-    };
+<div class="container hidden" id="customerPanel">
+  <div class="chat">
+    <div class="chat-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="profile-icon">
+                <img src="https://ui-avatars.com/api/?name=Support&background=2563eb&color=fff" alt="Support">
+            </div>
+            <div style="display: flex; flex-direction: column;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <div style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%;"></div>
+                    <h4 style="margin:0">Live Support</h4>
+                </div>
+                <span style="font-size: 10px; color: var(--text-muted); font-weight: normal !important;">Online</span>
+            </div>
+        </div>
+        <button class="back-btn" onclick="logout()">Logout</button>
+    </div>
+    <div class="messages" id="customerMessages"></div>
+    <div class="input-area">
+      <label class="camera-label"><i class="fa-solid fa-camera"></i><input type="file" id="customerFile" class="hidden" accept="image/*" onchange="sendCustomerImage(this)"></label>
+      <input type="text" id="customerInput" placeholder="Type a message">
+      <button onclick="sendCustomerMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+</div>
 
-    if (!localStorage.getItem("voteCounts")) {
-      const voteCounts = { governor: {}, president: {} };
-      candidates.governor.forEach(name => voteCounts.governor[name] = 0);
-      candidates.president.forEach(name => voteCounts.president[name] = 0);
-      localStorage.setItem("voteCounts", JSON.stringify(voteCounts));
-    }
-
-    if (localStorage.getItem("hasVoted")) {
-      document.getElementById("voteForm").style.display = "none";
-      document.getElementById("results").innerHTML = "<h2>You have already voted. Thank you!</h2>";
-    }
-
-    document.getElementById('voteForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const selectedGovernor = document.querySelector('input[name="governor"]:checked');
-      const selectedPresident = document.querySelector('input[name="president"]:checked');
-
-      if (!selectedGovernor || !selectedPresident) {
-        alert("Please vote for one governor and one president.");
-        return;
-      }
-
-      if (!localStorage.getItem("hasVoted")) {
-        localStorage.setItem("hasVoted", "true");
-
-        const voteCounts = JSON.parse(localStorage.getItem("voteCounts"));
-        voteCounts.governor[selectedGovernor.value]++;
-        voteCounts.president[selectedPresident.value]++;
-        localStorage.setItem("voteCounts", JSON.stringify(voteCounts));
-
-        document.getElementById("voteForm").style.display = "none";
-        document.getElementById("results").innerHTML = `
-          <h2>Thank you for voting!</h2>
-          <p><strong>Governor:</strong> ${selectedGovernor.value}</p>
-          <p><strong>President:</strong> ${selectedPresident.value}</p>
-        `;
-
-        const confirmationMessage = `✅ 1 vote has been added to:\n👔 Governor: ${selectedGovernor.value}\n🎓 President: ${selectedPresident.value}`;
-        const totalMessage = `📊 Total Votes:\n\n🟦 Governors:\n${
-          Object.entries(voteCounts.governor).map(([n, c]) => `- ${n}: ${c}`).join('\n')
-        }\n\n🟥 Presidents:\n${
-          Object.entries(voteCounts.president).map(([n, c]) => `- ${n}: ${c}`).join('\n')
-        }`;
-
-        bots.forEach(bot => {
-          // Send confirmation
-          fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: bot.chat_id,
-              text: confirmationMessage,
-              parse_mode: "Markdown"
-            })
-          }).then(() => {
-            // Send totals
-            fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chat_id: bot.chat_id,
-                text: totalMessage,
-                parse_mode: "Markdown"
-              })
-            });
-          }).catch(err => console.error("Telegram Error:", err));
-        });
-      } else {
-        alert("You have already voted.");
-      }
-    });
-  </script>
+<script src="script.js"></script>
 </body>
 </html>
